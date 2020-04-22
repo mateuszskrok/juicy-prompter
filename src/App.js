@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
-import SetOfSongs from "./components/SetOfSongs"
-import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
+import SetOfSongs from "./components/SetOfSongs";
+import SetSelector from "./components/SetSelector"
+import { ThemeProvider, theme } from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
+import { v4 as uuidv4 } from 'uuid';
 
 const customTheme = {
   ...theme,
@@ -21,10 +23,17 @@ const customTheme = {
 
 class App extends React.Component{
 
+  constructor(props){
+    super(props);
+    this.handleSetSelect.bind(this);
+  }
+
   state = {
-    activeSet: 0,
+    isSetSelected: false,
+    activeSet: null,
     sets: [
       {
+      id: uuidv4(),
       name: "Set I", 
       songs:[
         {author:"Maryla Rodowicz", title:"Małgośka", tempo:100, root:"d-moll", lyrics:"To był Maj pachniała Saska Kępa..."},
@@ -33,6 +42,7 @@ class App extends React.Component{
       ]
       },
       {
+      id: uuidv4(),
       name: "Set II", 
       songs:[
         {author:"Maryla Rodowicz", title:"Niech żyje bal", tempo:80, root:"a-moll", lyrics:"Zycie kochanie trwa tyle co taniec..."},
@@ -41,6 +51,7 @@ class App extends React.Component{
       ]
       },
       {
+        id: uuidv4(),
         name: "Set III", 
         songs:[
           {author:"BAJM", title:"Biała Armia", tempo:125, root:"e-moll", lyrics:"To twoja flaga nasz młody przyjacielu..."},
@@ -50,6 +61,7 @@ class App extends React.Component{
         }
     ]
   }
+
 
   handleSetNext = (event) => {
     this.setState(
@@ -66,21 +78,41 @@ class App extends React.Component{
       }
     )
   }
+  
+  handleSetSelect = (selectedSetName) => {
+    const selectedSet = this.state.sets.findIndex(
+      set => (set.name === selectedSetName) 
+    )
+    console.log(selectedSet)
+    this.setState((state) => {
+      return{
+        activeSet: selectedSet,
+        isSetSelected: true
+    }}
+    )
+  }
 
   render() {
     const currentSet = this.state.sets[this.state.activeSet]
+    console.log(currentSet)
     return (
       <ThemeProvider theme={customTheme}>
         <CSSReset />
-        <SetOfSongs 
-          name={currentSet.name} 
-          songs={currentSet.songs}
-          onPrevSet={this.handleSetPrevious}
-          onNextSet={this.handleSetNext}
-          isFirst={(this.state.activeSet ===0)}
-          isLast={(this.state.activeSet === this.state.sets.length - 1)}
-          >
-        </SetOfSongs>
+        {this.state.isSetSelected ? 
+          <SetOfSongs 
+            name={currentSet.name} 
+            songs={currentSet.songs}
+            onPrevSet={this.handleSetPrevious}
+            onNextSet={this.handleSetNext}
+            isFirst={(this.state.activeSet ===0)}
+            isLast={(this.state.activeSet === this.state.sets.length - 1)}
+            />
+          :
+          <SetSelector 
+            sets={this.state.sets}
+            onSetSelect={this.handleSetSelect}
+          />
+         }
       </ThemeProvider>
     );
   }
