@@ -1,15 +1,19 @@
 import React from "react";
 import { 
     Box, Heading, Badge,
-    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel
+    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button
 } from "@chakra-ui/core";
 
 class Song extends React.Component{
     render(){
-        const {title, author, tempo, root, lyrics} = this.props;
+        const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        let bg = "tomato";
+        if (title.includes("zielone")) {
+            bg = "#48bb78"
+        }
         return(
             <AccordionItem>
-                <AccordionHeader _expanded={{ bg: "tomato", color: "white" }}>
+                <AccordionHeader _expanded={{ bg: bg, color: "white" }}>
                     <Box flex="1" textAlign="left">
                         <Heading as="h3" size="lg">
                             {title}
@@ -27,6 +31,18 @@ class Song extends React.Component{
                     <Badge rounded="full" px="2" variantColor="gray">
                         {root}
                     </Badge>
+                    {isSetTrash ? 
+                    <Button>
+                        Przywróć
+                    </Button>
+                    :
+                    !isSetLast ?
+                    <Button onClick={() => onMoveSongToNextSet(id)}>
+                        Przenieś do następnego setu
+                    </Button> : 
+                    <Button onClick={() => onRejectSong(id)}>
+                        Odrzuć
+                    </Button> }
                     <Box>
                         {lyrics}
                     </Box>

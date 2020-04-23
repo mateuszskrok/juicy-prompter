@@ -1,10 +1,8 @@
-import {Button, Box, Heading, SimpleGrid} from "@chakra-ui/core";
+import {Box, Heading, SimpleGrid} from "@chakra-ui/core";
 import React from "react";
 
 class SetSelector extends React.Component{
-    constructor(props){
-        super(props);
-    }
+
 
     render(){
         const {sets, onSetSelect} = this.props

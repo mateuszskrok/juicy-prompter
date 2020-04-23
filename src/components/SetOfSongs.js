@@ -7,7 +7,7 @@ class SetOfSongs extends React.Component{
    
     render(){
        
-        const {onPrevSet, onNextSet, onSetDeselect, isFirst, isLast} = this.props;
+        const {onPrevSet, onNextSet, onSetDeselect, onMoveSongToNextSet, onRejectSong, isTrash, isFirst, isLast} = this.props;
         return(
             <>
             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
@@ -18,7 +18,7 @@ class SetOfSongs extends React.Component{
                     </Button> : ""}
                 </Box>
                         
-                <Box w="100%" h="10" align="center" >
+                <Box w="100%" h="10" alignContent="center" >
                     <Heading align="center">
                         {this.props.name}
                     </Heading>
@@ -33,11 +33,16 @@ class SetOfSongs extends React.Component{
             <Accordion>
             {this.props.songs.map( (song) => (
                     <Song
+                        id = {song.id}
                         title = {song.title}
                         author = {song.author}
                         root = {song.root}
                         tempo = {song.tempo}
                         lyrics = {song.lyrics}
+                        isSetLast = {isLast}
+                        isSetTrash = {isTrash}
+                        onMoveSongToNextSet = {() => onMoveSongToNextSet(song.id)}
+                        onRejectSong = {() => onRejectSong(song.id)}
                         />
                     ))}
             </Accordion>
