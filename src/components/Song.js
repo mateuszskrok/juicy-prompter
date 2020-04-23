@@ -32,17 +32,21 @@ class Song extends React.Component{
                         {root}
                     </Badge>
                     {isSetTrash ? 
-                    <Button>
-                        Przywróć
-                    </Button>
+                        <Button>
+                            Przywróć
+                        </Button>
                     :
-                    !isSetLast ?
-                    <Button onClick={() => onMoveSongToNextSet(id)}>
-                        Przenieś do następnego setu
-                    </Button> : 
-                    <Button onClick={() => onRejectSong(id)}>
-                        Odrzuć
-                    </Button> }
+                        <Button onClick={() => onRejectSong(id)}>
+                            Odrzuć
+                        </Button>
+                    }
+                    {!isSetLast ?
+                        <Button onClick={() => onMoveSongToNextSet(id)}>
+                            Przenieś do następnego setu
+                        </Button> 
+                    : 
+                        ""     
+                    }
                     <Box>
                         {lyrics}
                     </Box>

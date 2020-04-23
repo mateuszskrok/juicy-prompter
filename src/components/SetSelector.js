@@ -7,10 +7,12 @@ class SetSelector extends React.Component{
     render(){
         const {sets, onSetSelect} = this.props
         return(
+            <>
+            <Heading>Dzisiejsze wesółko składa się z...</Heading>
             <SimpleGrid columns={1} spacing={10}>
                 {sets.map((set) => (
                     <>
-                    <Box margin="auto" bg="tomato" width="50%" rounded={5} height="80px" as="button" onClick={() => onSetSelect(set.name)}>
+                    <Box margin="auto" bg="#63B3ED" width="50%" rounded={5} height="80px" as="button" onClick={() => onSetSelect(set.name)}>
                         <Heading>
                             {set.name}
                         </Heading>
@@ -18,6 +20,7 @@ class SetSelector extends React.Component{
                     </>
                 ))}
             </SimpleGrid>
+            </>
         )
     }
     

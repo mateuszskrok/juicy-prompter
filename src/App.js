@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import SetOfSongs from "./components/SetOfSongs";
 import SetSelector from "./components/SetSelector"
-import { ThemeProvider, theme } from '@chakra-ui/core';
+import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -142,7 +142,7 @@ class App extends React.Component{
     return (
       <ThemeProvider theme={customTheme}>
         <CSSReset />
-        {this.state.isSetSelected ? 
+        {this.state.isSetSelected ?
           <SetOfSongs 
             name={currentSet.name} 
             songs={this.state.songs.filter(
