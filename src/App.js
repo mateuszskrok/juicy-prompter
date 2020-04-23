@@ -92,6 +92,15 @@ class App extends React.Component{
     )
   }
 
+  handleSetDeselect = () => {
+    this.setState((state) => {
+      return{
+        activeSet: null,
+        isSetSelected: false
+    }}
+    )
+  }
+
   render() {
     const currentSet = this.state.sets[this.state.activeSet]
     console.log(currentSet)
@@ -104,6 +113,7 @@ class App extends React.Component{
             songs={currentSet.songs}
             onPrevSet={this.handleSetPrevious}
             onNextSet={this.handleSetNext}
+            onSetDeselect={this.handleSetDeselect}
             isFirst={(this.state.activeSet ===0)}
             isLast={(this.state.activeSet === this.state.sets.length - 1)}
             />

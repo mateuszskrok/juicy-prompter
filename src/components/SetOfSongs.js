@@ -7,26 +7,26 @@ class SetOfSongs extends React.Component{
    
     render(){
        
-        const {onPrevSet, onNextSet, isFirst, isLast} = this.props;
+        const {onPrevSet, onNextSet, onSetDeselect, isFirst, isLast} = this.props;
         return(
             <>
             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                 <Box w="100%" h="10">
                     {!isFirst ? 
-                    <Button onClick={onPrevSet} margin="auto">
-                        previous
+                    <Button onClick={onPrevSet} w="100%">
+                        poprzedni
                     </Button> : ""}
                 </Box>
                         
-                <Box w="100%" h="10"  >
+                <Box w="100%" h="10" align="center" >
                     <Heading align="center">
                         {this.props.name}
                     </Heading>
                 </Box>
                 <Box w="100%" h="10" >
                     {!isLast ? 
-                     <Button  onClick={onNextSet} margin="auto">
-                    next
+                     <Button  onClick={onNextSet} w="100%">
+                        następny
                     </Button> : ""}
                 </Box>
             </Grid>
@@ -41,6 +41,9 @@ class SetOfSongs extends React.Component{
                         />
                     ))}
             </Accordion>
+            <Button w ="100%" onClick={onSetDeselect}>
+                MENU
+            </Button>
             </>
         )
     }
