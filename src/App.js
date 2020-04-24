@@ -5,6 +5,7 @@ import SetSelector from "./components/SetSelector"
 import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
 import { v4 as uuidv4 } from 'uuid';
+import {songs,sets} from "./data/songs.json"
 
 const customTheme = {
   ...theme,
@@ -26,47 +27,17 @@ class App extends React.Component{
   constructor(props){
     super(props);
     this.handleSetSelect.bind(this);
+    this.state = {
+      isSetSelected: false,
+      activeSet: null,
+      songs,
+      sets
+    }
+  
+  
   }
 
-  state = {
-    isSetSelected: false,
-    activeSet: null,
-    songs: [
-      {id: 1, author:"Maryla Rodowicz", title:"Małgośka", tempo:100, root:"d-moll", lyrics:"To był Maj pachniała Saska Kępa..."},
-      {id: 2, author:"Natalia Nykiel", title:"Error", tempo:110, root:"c-moll", lyrics:"Tramwaj lepiej wie gdzie czas zakręca..."},
-      {id: 3, author:"Sandu Ciorba", title:"Dalibomba", tempo:90, root:"d-moll", lyrics:"A lej lej lej lej lej la..."},
-      {id: 4, author:"Maryla Rodowicz", title:"Niech żyje bal", tempo:80, root:"a-moll", lyrics:"Zycie kochanie trwa tyle co taniec..."},
-      {id: 5, author:"Krzysztof Krawczyk", title:"Tylko Ty", tempo:100, root:"F-dur", lyrics:"Nie każdy dzień był naszym dniem..."},
-      {id: 6, author:"Akcent", title:"Przez Twe Oczy zielone", tempo:130, root:"a-moll", lyrics:"Odkąd zobaczyłem Ciebie...."},
-      {id: 7, author:"BAJM", title:"Biała Armia", tempo:125, root:"e-moll", lyrics:"To twoja flaga nasz młody przyjacielu..."},
-      {id: 8, author:"Krzysztof Krawczyk", title:"Za Tobą pójdę jak na bal", tempo:110, root:"F-dur", lyrics:"Ty jedna umiesz w życie grać..."},
-      {id: 9, author:"Fitness", title:"Fitness", tempo:140, root:"d-moll", lyrics:"Doskonałe ciało masz, Najpiękniejsza Twoja twarz..."}
-    ],
-    sets: [
-      {
-      id: uuidv4(),
-      name: "Set I", 
-      songIds:[1,2,3]
-      },
-      {
-      id: uuidv4(),
-      name: "Set II", 
-      songIds:[4,5,6]
-      },
-      {
-      id: uuidv4(),
-      name: "Set III", 
-      songIds:[7,8,9]
-      },
-      {
-      id: uuidv4(),
-      name: "Odrzucone", 
-      songIds:[]
-      }
-    ]
-  }
-
-
+  
   handleSetNext = (event) => {
     this.setState(
       function(prevState) {
@@ -154,7 +125,7 @@ class App extends React.Component{
             onMoveSongToNextSet={this.handleMoveSongToNextSet}
             onRejectSong={this.handleRejectSong}
             isFirst={(this.state.activeSet === 0)}
-            isLast={(this.state.activeSet === this.state.sets.length - 2)}
+            isLast={(this.state.activeSet >= this.state.sets.length - 2)}
             isTrash={(this.state.sets[this.state.activeSet].name === "Odrzucone")}
             />
           :
@@ -170,3 +141,15 @@ class App extends React.Component{
 }
 
 export default App;
+
+// var data = {a:1, b:2, c:3};
+// var json = JSON.stringify(data);
+// var blob = new Blob([json], {type: "application/json"});
+// var url  = URL.createObjectURL(blob);
+
+// var a = document.createElement('a');
+// a.download    = "backup.json";
+// a.href        = url;
+// a.textContent = "Download backup.json";
+
+// document.getElementById('content').appendChild(a);
