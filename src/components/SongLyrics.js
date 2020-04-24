@@ -1,8 +1,9 @@
 import React from "react";
 import { 
     Box, 
-        } 
-from "@chakra-ui/core";
+        }
+    from "@chakra-ui/core";
+import config from "../config.js";
 import fetchJsonp from "fetch-jsonp";
 class SongLyrics extends React.Component{
     state = {
@@ -12,7 +13,10 @@ class SongLyrics extends React.Component{
     loadText(){
         const title = this.props.title
         const author = this.props.author
-        fetchJsonp("https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?format=jsonp&callback=callback&q_track="+title+"&q_artist="+author+"&apikey=f066f67e71b16b0c1d7d11c86f1ef160")
+        const apikey = config.MUSIXMATCH_APIKEY
+        console.log(apikey)
+        fetchJsonp("https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?format=jsonp&callback=callback&q_track="+
+                    title+"&q_artist="+author+"&apikey="+apikey+"")
             .then(response => { return response.json();})
             .then(responseData => {console.log(responseData); return responseData;})
             .then(
