@@ -5,7 +5,7 @@ import SetSelector from "./components/SetSelector"
 import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
 import { v4 as uuidv4 } from 'uuid';
-import {songs,sets} from "./data/songs.json"
+import {gigname, songs, sets} from "./data/songs.json"
 
 const customTheme = {
   ...theme,
@@ -30,6 +30,7 @@ class App extends React.Component{
     this.state = {
       isSetSelected: false,
       activeSet: null,
+      gigname,
       songs,
       sets
     }
@@ -129,7 +130,8 @@ class App extends React.Component{
             isTrash={(this.state.sets[this.state.activeSet].name === "Odrzucone")}
             />
           :
-          <SetSelector 
+          <SetSelector
+            gigname={this.state.gigname}
             sets={this.state.sets}
             onSetSelect={this.handleSetSelect}
           />

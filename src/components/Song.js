@@ -3,8 +3,10 @@ import {
     Box, Heading, Badge, IconButton, Divider,
     AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup
 } from "@chakra-ui/core";
+import SongLyrics from "./SongLyrics";
 
 class Song extends React.Component{
+   
     render(){
         const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
         let bg = "tomato";
@@ -24,7 +26,7 @@ class Song extends React.Component{
                     </Box>
                   <AccordionIcon />
                 </AccordionHeader>
-                <AccordionPanel spacing={5}>
+                <AccordionPanel spacing={5} width="100%">
                     <Badge rounded="full" px="2" variantColor="gray">
                         {tempo} BPM
                     </Badge>
@@ -46,10 +48,8 @@ class Song extends React.Component{
                             ""     
                         }
                     </ButtonGroup>
-                   
-                    <Box>
-                        {lyrics}
-                    </Box>
+                    <SongLyrics title={title} author={author} lyrics={lyrics}/>
+                    
                  </AccordionPanel>
                 </AccordionItem>
         )

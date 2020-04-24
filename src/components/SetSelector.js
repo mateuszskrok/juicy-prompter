@@ -5,10 +5,10 @@ class SetSelector extends React.Component{
 
 
     render(){
-        const {sets, onSetSelect} = this.props
+        const {gigname, sets, onSetSelect} = this.props
         return(
             <>
-            <Heading>Dzisiejsze wesółko składa się z...</Heading>
+            <Heading margin="auto">{gigname}</Heading>
             <SimpleGrid columns={1} spacing={10}>
                 {sets.map((set) => (
                     <>
