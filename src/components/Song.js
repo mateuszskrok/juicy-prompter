@@ -1,7 +1,7 @@
 import React from "react";
 import { 
-    Box, Heading, Badge,
-    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button
+    Box, Heading, Badge, IconButton, Divider,
+    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup
 } from "@chakra-ui/core";
 
 class Song extends React.Component{
@@ -24,29 +24,29 @@ class Song extends React.Component{
                     </Box>
                   <AccordionIcon />
                 </AccordionHeader>
-                <AccordionPanel>
+                <AccordionPanel spacing={5}>
                     <Badge rounded="full" px="2" variantColor="gray">
                         {tempo} BPM
                     </Badge>
                     <Badge rounded="full" px="2" variantColor="gray">
                         {root}
                     </Badge>
-                    {isSetTrash ? 
-                        <Button>
-                            Przywróć
-                        </Button>
-                    :
-                        <Button onClick={() => onRejectSong(id)}>
-                            Odrzuć
-                        </Button>
-                    }
-                    {!isSetLast ?
-                        <Button onClick={() => onMoveSongToNextSet(id)}>
-                            Przenieś do następnego setu
-                        </Button> 
-                    : 
-                        ""     
-                    }
+                    <Divider orientation="vertical"/>
+                    <ButtonGroup spacing={3}>
+                        {isSetTrash ? 
+                            <Button>
+                                Przywróć
+                            </Button>
+                        :
+                            <IconButton onClick={() => onRejectSong(id)} icon="delete"/>
+                        }
+                        {!isSetLast ?
+                            <IconButton onClick={() => onMoveSongToNextSet(id)} icon="arrow-forward"/> 
+                        : 
+                            ""     
+                        }
+                    </ButtonGroup>
+                   
                     <Box>
                         {lyrics}
                     </Box>
