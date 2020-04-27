@@ -1,6 +1,7 @@
 import {Box, Button, Grid, Heading, Accordion} from "@chakra-ui/core";
 import React from "react";
 import Song from "./Song";
+import {notes, chords} from "../data/songs.json"
 
 
 class SetOfSongs extends React.Component{
@@ -39,6 +40,8 @@ class SetOfSongs extends React.Component{
                         root = {song.root}
                         tempo = {song.tempo}
                         lyrics = {song.lyrics}
+                        notes = {notes[song.id].body}
+                        chords = {chords[song.id].body}
                         isSetLast = {isLast}
                         isSetTrash = {isTrash}
                         onMoveSongToNextSet = {() => onMoveSongToNextSet(song.id)}

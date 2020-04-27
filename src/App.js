@@ -5,7 +5,7 @@ import SetSelector from "./components/SetSelector"
 import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
 import { v4 as uuidv4 } from 'uuid';
-import {gigname, songs, sets} from "./data/songs.json"
+import {gigname, songs, sets, notes} from "./data/songs.json"
 
 const customTheme = {
   ...theme,
@@ -34,8 +34,6 @@ class App extends React.Component{
       songs,
       sets
     }
-  
-  
   }
 
   

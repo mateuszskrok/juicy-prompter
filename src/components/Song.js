@@ -1,9 +1,13 @@
 import React from "react";
 import { 
-    Box, Heading, Badge, IconButton, Divider,
+    Box, Heading, Badge, IconButton, Divider, Text,
     AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup
 } from "@chakra-ui/core";
+import {BsFileText} from "react-icons/bs";
+import {GiMusicalScore}from "react-icons/gi";
+import {MdSpeakerNotes} from "react-icons/md";
 import SongLyrics from "./SongLyrics";
+import TapTempoButton from "./TapTempoButton";
 
 class Song extends React.Component{
     constructor(props){
@@ -13,40 +17,19 @@ class Song extends React.Component{
     }
 
     state={
-        areLyricsVisible:true,
-        tempo:null,
-        tapTempoTimestamp: null
+        areLyricsVisible: true,
+        areNotesVisible: false,
+        areChordSVisible: false
     };
 
-    handleTapTempo = (event) => {
+    handleToggleNotesVisibility = (event) => {
         this.setState((prevState) => {
-            const tapTempoTimestamp = new Date().getTime();
-            const timeDifferenceBetweenTapsInSeconds = (tapTempoTimestamp - prevState.tapTempoTimestamp)/1000;
-            var tempo = 60 / timeDifferenceBetweenTapsInSeconds; 
-            if (timeDifferenceBetweenTapsInSeconds > 2) {
-                tempo = prevState.tempo;
-            }
-            else {
-                const actualTempo = tempo; 
-                var avgTempo = null;
-                if (prevState.tempo){
-                    avgTempo = (2*prevState.tempo + actualTempo) / 3; //smoothen tempo changes
-                    tempo = Math.round(avgTempo);
-                }
-                else{
-                    tempo=Math.round(actualTempo);
-                }
-            }
             return{
-                tapTempoTimestamp: tapTempoTimestamp,
-                timeDifferenceBetweenTapsInSeconds: timeDifferenceBetweenTapsInSeconds,
-                tempo: tempo
+                areNotesVisible: !prevState.areNotesVisible
             }
         })
     }
-
    
-
     handleToggleLyricsVisibility = (event) => {
         this.setState((prevState) => {
             return{
@@ -54,10 +37,18 @@ class Song extends React.Component{
             }
         })
     }
+
+    handleToggleChordsVisibility = (event) => {
+        this.setState((prevState) => {
+            return{
+                areChordsVisible: !prevState.areChordsVisible
+            }
+        })
+    }
    
     render(){
-        const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
-        const {areLyricsVisible, timeDifferenceBetweenTapsInSeconds} = this.state;
+        const {id, title, author, tempo, root, lyrics, notes, chords, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        const {areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
         let bg = "tomato";
         if (title.includes("zielone")) {
             bg = "#48bb78"
@@ -97,17 +88,29 @@ class Song extends React.Component{
                             ""     
                         }
                         <Button onClick={this.handleToggleLyricsVisibility}>
-                            {areLyricsVisible ? "ukryj " : "pokaż " } tekst
+                            <Box as={BsFileText}/>
                         </Button>
-                        <button onMouseDown={this.handleTapTempo} 
-                                class="blink"  
-                                style={{
-                                    animation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`, 
-                                    webkitAnimation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`
-                                    }}>
-                                    {this.state.tempo ? this.state.tempo : "TAP"}
-                        </button>
+                        <Button onClick={this.handleToggleNotesVisibility}> 
+                            <Box as={MdSpeakerNotes}/>
+                        </Button>
+                        <Button onClick={this.handleToggleChordsVisibility}>
+                            <Box as={GiMusicalScore}/>
+                        </Button>
+                        <TapTempoButton tempo={tempo}/>
                     </ButtonGroup>
+                    
+                    {areNotesVisible ?
+                    
+                    <Box>
+                        <Text as="i">{notes}</Text> 
+                    </Box>
+                    : ""}
+                    {areChordsVisible ? 
+                    <Box>
+                        <Text as="kbd">{chords}</Text>
+                    </Box>
+                    : ""}
+                    
                     <SongLyrics title={title} author={author} defaultLyrics={lyrics} areVisible={areLyricsVisible}/>
                     
                  </AccordionPanel>

@@ -32,5 +32,27 @@
         "name": "Odrzucone", 
         "songIds":[]
         }
+    ],
+    "notes":[
+        {"songId":1, "body": "Nie gramy tego"},
+        {"songId":2, "body": "Zaczyna Mati"},
+        {"songId":3, "body": "Albo równo albo wcale"},
+        {"songId":4, "body": "Zaczyna perkusja"},
+        {"songId":5, "body": "Bez wokalu"},
+        {"songId":6, "body": "Animacje dla publiczności"},
+        {"songId":7, "body": "Śmieszna zapowiedź"},
+        {"songId":8, "body": "Energicznie"},
+        {"songId":9, "body": "Z jajem"}
+    ],
+    "chords":[
+        {"songId":1, "body": "DADGAD"},
+        {"songId":2, "body": "E G A"},
+        {"songId":3, "body": "B  D C G"},
+        {"songId":4, "body": "a fis gis"},
+        {"songId":5, "body": "C | H | E E E|"},
+        {"songId":6, "body": "h e h e"},
+        {"songId":7, "body": "B A B A"},
+        {"songId":8, "body": "D A C h"},
+        {"songId":9, "body": "G A D"}
     ]
 }
