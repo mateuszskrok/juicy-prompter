@@ -1,0 +1,22 @@
+.blink{
+    border-radius:3px;
+    border: none;
+    height:40px;
+    line-height:40px;
+    width:40px;
+    background-color:#ddd;
+    display:inline-block;
+    color: black;
+    text-decoration:none;
+    font-family:sans-serif;
+}
+@keyframes blink {
+    50% {
+    background-color:lightblue;
+    }
+}
+@-webkit-keyframes blink {
+    50% {
+    background-color:lightblue;
+    }
+}

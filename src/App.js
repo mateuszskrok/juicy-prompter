@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import SetOfSongs from "./components/SetOfSongs";
 import SetSelector from "./components/SetSelector"
 import { ThemeProvider, theme, Heading } from '@chakra-ui/core';

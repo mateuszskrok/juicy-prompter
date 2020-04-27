@@ -6,9 +6,58 @@ import {
 import SongLyrics from "./SongLyrics";
 
 class Song extends React.Component{
+    constructor(props){
+        super(props);
+       
+        this.handleToggleLyricsVisibility.bind(this)
+    }
+
+    state={
+        areLyricsVisible:true,
+        tempo:null,
+        tapTempoTimestamp: null
+    };
+
+    handleTapTempo = (event) => {
+        this.setState((prevState) => {
+            const tapTempoTimestamp = new Date().getTime();
+            const timeDifferenceBetweenTapsInSeconds = (tapTempoTimestamp - prevState.tapTempoTimestamp)/1000;
+            var tempo = 60 / timeDifferenceBetweenTapsInSeconds; 
+            if (timeDifferenceBetweenTapsInSeconds > 2) {
+                tempo = prevState.tempo;
+            }
+            else {
+                const actualTempo = tempo; 
+                var avgTempo = null;
+                if (prevState.tempo){
+                    avgTempo = (2*prevState.tempo + actualTempo) / 3; //smoothen tempo changes
+                    tempo = Math.round(avgTempo);
+                }
+                else{
+                    tempo=Math.round(actualTempo);
+                }
+            }
+            return{
+                tapTempoTimestamp: tapTempoTimestamp,
+                timeDifferenceBetweenTapsInSeconds: timeDifferenceBetweenTapsInSeconds,
+                tempo: tempo
+            }
+        })
+    }
+
+   
+
+    handleToggleLyricsVisibility = (event) => {
+        this.setState((prevState) => {
+            return{
+                areLyricsVisible: !prevState.areLyricsVisible
+            }
+        })
+    }
    
     render(){
         const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        const {areLyricsVisible, timeDifferenceBetweenTapsInSeconds} = this.state;
         let bg = "tomato";
         if (title.includes("zielone")) {
             bg = "#48bb78"
@@ -47,8 +96,19 @@ class Song extends React.Component{
                         : 
                             ""     
                         }
+                        <Button onClick={this.handleToggleLyricsVisibility}>
+                            {areLyricsVisible ? "ukryj " : "pokaż " } tekst
+                        </Button>
+                        <button onMouseDown={this.handleTapTempo} 
+                                class="blink"  
+                                style={{
+                                    animation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`, 
+                                    webkitAnimation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`
+                                    }}>
+                                    {this.state.tempo ? this.state.tempo : "TAP"}
+                        </button>
                     </ButtonGroup>
-                    <SongLyrics title={title} author={author} lyrics={lyrics}/>
+                    <SongLyrics title={title} author={author} defaultLyrics={lyrics} areVisible={areLyricsVisible}/>
                     
                  </AccordionPanel>
                 </AccordionItem>
