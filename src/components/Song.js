@@ -10,11 +10,6 @@ import SongLyrics from "./SongLyrics";
 import TapTempoButton from "./TapTempoButton";
 
 class Song extends React.Component{
-    constructor(props){
-        super(props);
-       
-        this.handleToggleLyricsVisibility.bind(this)
-    }
 
     state={
         areLyricsVisible: true,

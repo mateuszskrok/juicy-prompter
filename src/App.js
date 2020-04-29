@@ -2,10 +2,9 @@ import React from 'react';
 import './App.scss';
 import SetOfSongs from "./components/SetOfSongs";
 import SetSelector from "./components/SetSelector"
-import { ThemeProvider, theme, Heading } from '@chakra-ui/core';
+import { ThemeProvider, theme} from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
-import { v4 as uuidv4 } from 'uuid';
-import {gigname, songs, sets, notes} from "./data/songs.json"
+import {gigname, sets} from "./data/songs.json"
 
 const customTheme = {
   ...theme,
@@ -31,7 +30,6 @@ class App extends React.Component{
       isSetSelected: false,
       activeSet: null,
       gigname,
-      songs,
       sets
     }
   }
@@ -105,8 +103,7 @@ class App extends React.Component{
   }
 
   render() {
-    console.log("this: ", this);
-    console.log("this state: ", this.state);
+
     const currentSet = this.state.sets[this.state.activeSet]
  
     return (
@@ -115,9 +112,7 @@ class App extends React.Component{
         {this.state.isSetSelected ?
           <SetOfSongs 
             name={currentSet.name} 
-            songs={this.state.songs.filter(
-              song => (currentSet.songIds.includes(song.id))
-            )}
+            setId={currentSet.id}
             onPrevSet={this.handleSetPrevious}
             onNextSet={this.handleSetNext}
             onSetDeselect={this.handleSetDeselect}
@@ -141,15 +136,3 @@ class App extends React.Component{
 }
 
 export default App;
-
-// var data = {a:1, b:2, c:3};
-// var json = JSON.stringify(data);
-// var blob = new Blob([json], {type: "application/json"});
-// var url  = URL.createObjectURL(blob);
-
-// var a = document.createElement('a');
-// a.download    = "backup.json";
-// a.href        = url;
-// a.textContent = "Download backup.json";
-
-// document.getElementById('content').appendChild(a);

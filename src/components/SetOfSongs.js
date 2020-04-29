@@ -1,13 +1,28 @@
 import {Box, Button, Grid, Heading, Accordion} from "@chakra-ui/core";
 import React from "react";
 import Song from "./Song";
-import {notes, chords} from "../data/songs.json"
+import {notes, chords} from "../data/songs.json";
+import SongsAPI from "../api/SongsAPI";
 
 
 class SetOfSongs extends React.Component{
+    state = {
+        songs: [],
+        error: null,
+        loading:true
+    }
+
+    componentDidMount(){
+        SongsAPI.getAllSongsFromSet(this.props.setId).then(
+        (songs) => this.setState({songs})
+        ).catch(
+            (error) => this.setState({error})
+        ).then(
+            () => this.setState({loading:false})
+        )
+    }
    
     render(){
-       
         const {onPrevSet, onNextSet, onSetDeselect, onMoveSongToNextSet, onRejectSong, isTrash, isFirst, isLast} = this.props;
         return(
             <>
@@ -32,7 +47,9 @@ class SetOfSongs extends React.Component{
                 </Box>
             </Grid>
             <Accordion>
-            {this.props.songs.map( (song) => (
+            {this.state.loading ? "Ładuję utwory..." : null}
+            {this.state.error ? "nie udało się załadować utworów" : null}
+            {this.state.songs.map( (song) => (
                     <Song
                         id = {song.id}
                         title = {song.title}
