@@ -41,10 +41,10 @@ class TapTempoButton extends React.Component{
         const {timeDifferenceBetweenTapsInSeconds} = this.state;
         return(
             <button onMouseDown={this.handleTapTempo} 
-                                class="blink"  
+                                className="blink"  
                                 style={{
                                     animation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`, 
-                                    webkitAnimation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`
+                                    WebkitAnimation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`
                                     }}>
                                     {this.state.tempo ? this.state.tempo : "TAP"}
                         </button>
