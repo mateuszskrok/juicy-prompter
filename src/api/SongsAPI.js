@@ -1,10 +1,11 @@
 import axios from "axios";
-const BASE_URL = ("http://localhost:4000/songs");
-const SETS_URL = ("http://localhost:4000/sets");
+import BASE_URL from "./config"
+const SETS_URL = (`${BASE_URL}/sets`);
+const SONGS_URL = (`${BASE_URL}/songs`);
 
 const SongsAPI ={
     getAllSongs: async function(){
-        const response = await axios.get(BASE_URL);
+        const response = await axios.get(SONGS_URL);
         const songs = response.data;
         return songs;
     },
@@ -13,7 +14,7 @@ const SongsAPI ={
         const sets = setsResponse.data;
 
         const currentSet = sets.find((set) => set.id === setId)
-        const response = await axios.get(BASE_URL);
+        const response = await axios.get(SONGS_URL);
         const songs = response.data;
 
         const songsFromSet = songs.filter((song) => currentSet.songIds.includes(song.id))

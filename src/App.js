@@ -2,9 +2,12 @@ import React from 'react';
 import './App.scss';
 import SetOfSongs from "./components/SetOfSongs";
 import SetSelector from "./components/SetSelector"
-import { ThemeProvider, theme} from '@chakra-ui/core';
+import { ThemeProvider, Select, theme, useToast} from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
-import {gigname, sets} from "./data/songs.json"
+import GigsAPI from "./api/GigsAPI";
+import SetsAPI from "./api/SetsAPI";
+import SongsAPI from "./api/SongsAPI";
+
 
 const customTheme = {
   ...theme,
@@ -28,42 +31,130 @@ class App extends React.Component{
     this.handleSetSelect.bind(this);
     this.state = {
       isSetSelected: false,
-      activeSet: null,
-      gigname,
-      sets
+      activeSetId: null,
+      currentGig: 1,
+      sets: [],
+      gigs: [],
+      songs: [],
+      loading: true,
+      error: null
     }
   }
 
-  
-  handleSetNext = (event) => {
-    this.setState(
-      function(prevState) {
-        return{activeSet: prevState.activeSet+1}
-      }
+  componentDidMount(){
+    GigsAPI.getAllGigs().then(
+      (gigs) => this.setState({
+        gigs})
+    ).catch(
+      (error) => this.setState({error})
+    ).then(
+      () => this.setState({
+          loading:false,
+        })
     )
   }
 
-  handleSetPrevious = (event) => {
-    this.setState(
-      function(prevState) {
-        return{activeSet: prevState.activeSet-1}
-      }
-    )
+  handleGigSelection = (gigId) => {
+    const currentGig = this.findGigByAnId(gigId)
+    if (currentGig) {
+      SetsAPI.getAllSetsFromGig(gigId).then(
+        (sets) => this.setState({sets}))
+        .catch(
+            (error) => this.setState({error})
+        )
+      
+      this.setState({
+        isSetSelected: false,
+        currentGig: currentGig
+      })
+    }
   }
+
+  findGigByAnId(gigId){
+    return this.state.gigs.find(gig => gig.id === gigId)
+  }
+
+   
+  handleSetSelect = (selectedSetId) => {
+    this.setState(() => {
+      return{
+        activeSetId: selectedSetId,
+        isSetSelected: true
+    }}
+    )  
+    SongsAPI.getAllSongsFromSet(selectedSetId).then(
+      (songs) => this.setState({songs})
+      ).catch(
+          (error) => this.setState({error})
+      )
+  }
+
+  getIdOfNextSet(sets, currentSetId){
+    const activeSetIndex = sets.findIndex(
+      set => (set.id === currentSetId) 
+    )
+    const nextSetId = sets[activeSetIndex+1].id;
+    return nextSetId
+  }
+
+  getIdOfPreviousSet(sets, currentSetId){
+    const activeSetIndex = sets.findIndex(
+      set => (set.id === currentSetId) 
+    )
+    const previousSetId = sets[activeSetIndex-1].id;
+    return previousSetId
+  }
+
+  handleSetNext = () => {
+    this.setState((state) => {
+      const nextSetId = this.getIdOfNextSet(state.sets, state.activeSetId)
+      SongsAPI.getAllSongsFromSet(nextSetId).then(
+        (songs) => this.setState({songs})
+        ).catch(
+            (error) => this.setState({error})
+        )
+      return{
+        activeSetId: nextSetId,
+        isSetSelected: true
+    }}
+    )  
+  }
+  handleSetPrevious = () => {
+    this.setState((state) => {
+      const prevSetId = this.getIdOfPreviousSet(state.sets, state.activeSetId)
+      SongsAPI.getAllSongsFromSet(prevSetId).then(
+        (songs) => this.setState({songs})
+        ).catch(
+            (error) => this.setState({error})
+        )
+      return{
+        activeSetId: prevSetId,
+        isSetSelected: true
+    }}
+    )  
+  }
+
 
   handleMoveSongToNextSet = (selectedSongId) => {
-    console.log(selectedSongId) 
     this.setState(
-      function(prevState) {
-        let changedSets = prevState.sets
-        console.log(changedSets[prevState.activeSet].songIds)
-        let filtered = changedSets[prevState.activeSet].songIds.filter((val) => val !== selectedSongId)
-        changedSets[prevState.activeSet].songIds = filtered
-        changedSets[prevState.activeSet+1].songIds.push(selectedSongId)
-        console.log("sety:",changedSets);
-        return{sets: changedSets}
-      }
-    )
+      (prevState) =>{
+        const currentSetIndex = prevState.sets.findIndex(
+          set => (set.id === prevState.activeSetId) 
+        )
+        let setsToChange = prevState.sets 
+        let currentSet = setsToChange[currentSetIndex]
+        let nextSet = setsToChange[currentSetIndex+1]
+        const indexToRemove = currentSet.songIds.findIndex(
+          songId => (songId === selectedSongId))
+        console.log("indexToRemove: ", indexToRemove)
+        currentSet.songIds.splice(indexToRemove,1)
+        console.log("current: ", currentSet)
+        nextSet.songIds.push(selectedSongId)
+        console.log("next: ", nextSet)
+        SetsAPI.replaceSet(currentSet.id, currentSet)
+        SetsAPI.replaceSet(nextSet.id, nextSet)
+        return {sets: setsToChange}
+      })
   }
 
   handleRejectSong = (selectedSongId) => {
@@ -80,21 +171,10 @@ class App extends React.Component{
       }
     )
   }
-  
-  handleSetSelect = (selectedSetName) => {
-    const selectedSet = this.state.sets.findIndex(
-      set => (set.name === selectedSetName) 
-    )
-    this.setState((state) => {
-      return{
-        activeSet: selectedSet,
-        isSetSelected: true
-    }}
-    )
-  }
+ 
 
   handleSetDeselect = () => {
-    this.setState((state) => {
+    this.setState(() => {
       return{
         activeSet: null,
         isSetSelected: false
@@ -104,15 +184,25 @@ class App extends React.Component{
 
   render() {
 
-    const currentSet = this.state.sets[this.state.activeSet]
- 
+    const currentSet = this.state.sets.find(set => set.id === this.state.activeSetId)
+    const currentSetIndex = this.state.sets.findIndex(set => set.id === this.state.activeSetId)
+    
     return (
       <ThemeProvider theme={customTheme}>
         <CSSReset />
+        {this.state.loading? "Ładuję dane" :
+        <>
+        <Select className="form-control" onChange={(event) => this.handleGigSelection(parseInt(event.target.value))} placeholder="Wybierz koncert">
+          {this.state.gigs.map(
+            (gig) => <option key={gig.id} value={gig.id}>{gig.name}</option>
+          )
+          }        
+        </Select>
         {this.state.isSetSelected ?
-          <SetOfSongs 
+          <SetOfSongs
             name={currentSet.name} 
             setId={currentSet.id}
+            songs={this.state.songs}
             onPrevSet={this.handleSetPrevious}
             onNextSet={this.handleSetNext}
             onSetDeselect={this.handleSetDeselect}
@@ -120,15 +210,17 @@ class App extends React.Component{
             onRejectSong={this.handleRejectSong}
             isFirst={(this.state.activeSet === 0)}
             isLast={(this.state.activeSet >= this.state.sets.length - 2)}
-            isTrash={(this.state.sets[this.state.activeSet].name === "Odrzucone")}
+            isTrash={(this.state.sets[currentSetIndex].name === "Odrzucone")}
             />
           :
           <SetSelector
-            gigname={this.state.gigname}
-            sets={this.state.sets}
+            gigId = {this.state.currentGig.id}
+            gigName = {this.state.currentGig.name}
+            sets = {this.state.sets}
             onSetSelect={this.handleSetSelect}
           />
          }
+         </>}
       </ThemeProvider>
     );
   }

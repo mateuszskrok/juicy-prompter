@@ -1,6 +1,6 @@
 import React from "react";
 import { 
-    Box, Heading, Badge, IconButton, Divider, Text,
+    Box, Heading, Badge, IconButton, Divider, Text, useToast,
     AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup
 } from "@chakra-ui/core";
 import {BsFileText} from "react-icons/bs";
@@ -44,6 +44,7 @@ class Song extends React.Component{
     render(){
         const {id, title, author, tempo, root, lyrics, notes, chords, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
         const {areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
+        
         let bg = "tomato";
         if (title.includes("zielone")) {
             bg = "#48bb78"
