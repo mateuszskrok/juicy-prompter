@@ -11,14 +11,20 @@ import SongsAPI from "./api/SongsAPI";
 
 const customTheme = {
   ...theme,
+  fonts: {
+    body: "Open Sans",
+    heading: "Open Sans",
+    preformatted: "Roboto Light",
+    button: "comfortaa"
+  },
   colors: {
     ...theme.colors,
     primary: {
       // other shades
-      500: "#123456"
+      500: "#ffcc00"
     },
     secondary: {
-      500: "#646463"
+      500: "#164450"
     }
   }
 };
@@ -93,8 +99,8 @@ class App extends React.Component{
     const activeSetIndex = sets.findIndex(
       set => (set.id === currentSetId) 
     )
-    const nextSetId = sets[activeSetIndex+1].id;
-    return nextSetId
+      const nextSetId = sets[activeSetIndex+1].id;
+      return nextSetId
   }
 
   getIdOfPreviousSet(sets, currentSetId){
@@ -146,11 +152,9 @@ class App extends React.Component{
         let nextSet = setsToChange[currentSetIndex+1]
         const indexToRemove = currentSet.songIds.findIndex(
           songId => (songId === selectedSongId))
-        console.log("indexToRemove: ", indexToRemove)
+
         currentSet.songIds.splice(indexToRemove,1)
-        console.log("current: ", currentSet)
         nextSet.songIds.push(selectedSongId)
-        console.log("next: ", nextSet)
         SetsAPI.replaceSet(currentSet.id, currentSet)
         SetsAPI.replaceSet(nextSet.id, nextSet)
         return {sets: setsToChange}
@@ -158,18 +162,23 @@ class App extends React.Component{
   }
 
   handleRejectSong = (selectedSongId) => {
-    console.log(selectedSongId) 
     this.setState(
-      function(prevState) {
-        let changedSets = prevState.sets
-        console.log(changedSets[prevState.activeSet].songIds)
-        let filtered = changedSets[prevState.activeSet].songIds.filter((val) => val !== selectedSongId)
-        changedSets[prevState.activeSet].songIds = filtered
-        changedSets[changedSets.length -1].songIds.push(selectedSongId)
-        console.log("sety:",changedSets);
-        return{sets: changedSets}
-      }
-    )
+      (prevState) =>{
+        const currentSetIndex = prevState.sets.findIndex(
+          set => (set.id === prevState.activeSetId) 
+        )
+        let setsToChange = prevState.sets 
+        let currentSet = setsToChange[currentSetIndex]
+        let lastSet = setsToChange[prevState.sets.length-1]
+        const indexToRemove = currentSet.songIds.findIndex(
+          songId => (songId === selectedSongId))
+
+        currentSet.songIds.splice(indexToRemove,1)
+        lastSet.songIds.push(selectedSongId)
+        SetsAPI.replaceSet(currentSet.id, currentSet)
+        SetsAPI.replaceSet(lastSet.id, lastSet)
+        return {sets: setsToChange}
+      })
   }
  
 
@@ -208,9 +217,9 @@ class App extends React.Component{
             onSetDeselect={this.handleSetDeselect}
             onMoveSongToNextSet={this.handleMoveSongToNextSet}
             onRejectSong={this.handleRejectSong}
-            isFirst={(this.state.activeSet === 0)}
-            isLast={(this.state.activeSet >= this.state.sets.length - 2)}
-            isTrash={(this.state.sets[currentSetIndex].name === "Odrzucone")}
+            isFirst={(currentSetIndex === 0)}
+            isLast={(currentSetIndex+1 === this.state.sets.length)}
+            isTrash={(currentSetIndex+1 === this.state.sets.length)}
             />
           :
           <SetSelector
