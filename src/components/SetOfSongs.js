@@ -2,12 +2,13 @@ import {Box, Button, Grid, Heading, Accordion} from "@chakra-ui/core";
 import React from "react";
 import Song from "./Song";
 
-
 class SetOfSongs extends React.Component{
     state = {
         error: null,
         loading:true
     }
+
+  
    
     render(){
         const {onPrevSet, onNextSet, onSetDeselect, onMoveSongToNextSet, onRejectSong, isTrash, isFirst, isLast} = this.props;
@@ -45,8 +46,6 @@ class SetOfSongs extends React.Component{
                         root = {song.root}
                         tempo = {song.tempo}
                         lyrics = {song.lyrics}
-                        //notes = {notes[song.id].body}
-                        //chords = {chords[song.id].body}
                         isSetLast = {isLast}
                         isSetTrash = {isTrash}
                         onMoveSongToNextSet = {() => onMoveSongToNextSet(song.id)}

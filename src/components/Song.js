@@ -8,14 +8,40 @@ import {GiMusicalScore}from "react-icons/gi";
 import {MdSpeakerNotes} from "react-icons/md";
 import SongLyrics from "./SongLyrics";
 import TapTempoButton from "./TapTempoButton";
+import ChordsAPI from "../api/ChordsAPI";
+import NotesAPI from "../api/NotesAPI";
 
 class Song extends React.Component{
 
     state={
+        notes: {},
+        chords: {},
         areLyricsVisible: true,
         areNotesVisible: false,
-        areChordSVisible: false
+        areChordSVisible: false,
+        error: null
     };
+
+    componentDidMount(){
+      this.getChords(this.props.id)
+      this.getNotes(this.props.id)
+    }
+    getChords(songID){
+        ChordsAPI.getChords(songID).then(
+            (chords) => this.setState({chords})
+        ).catch(
+            (error) => this.setState({error})   
+        )
+    }
+
+    getNotes(songID){
+        NotesAPI.getNotes(songID).then(
+            (notes) => this.setState({notes})
+        ).catch(
+            (error) => this.setState({error})   
+        )
+    }
+
 
     handleToggleNotesVisibility = (event) => {
         this.setState((prevState) => {
@@ -42,8 +68,8 @@ class Song extends React.Component{
     }
    
     render(){
-        const {id, title, author, tempo, root, lyrics, notes, chords, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
-        const {areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
+        const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        const {chords, notes, areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
         
         let bg = "#333";
         if (title.includes("zielone")) {
