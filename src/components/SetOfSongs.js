@@ -22,7 +22,7 @@ class SetOfSongs extends React.Component{
                 </Box>
                         
                 <Box w="100%" h="10" alignContent="center" >
-                    <Heading align="center">
+                    <Heading textAlign="center">
                         {this.props.name}
                     </Heading>
                 </Box>

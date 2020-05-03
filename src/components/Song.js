@@ -45,7 +45,7 @@ class Song extends React.Component{
         const {id, title, author, tempo, root, lyrics, notes, chords, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
         const {areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
         
-        let bg = "tomato";
+        let bg = "#333";
         if (title.includes("zielone")) {
             bg = "#48bb78"
         }

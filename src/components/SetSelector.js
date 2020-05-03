@@ -12,7 +12,7 @@ class SetSelector extends React.Component{
             <SimpleGrid columns={2} spacing={10}>
                 {sets.map((set) => (
                     <>
-                    <Box key={set.id} margin="auto" bg="#63B3ED" width="90%" rounded={5} height="80px" as="button" onClick={() => onSetSelect(set.id)}>
+                    <Box key={set.id} margin="auto" bg="#333" color="#fff" width="90%" rounded={5} height="80px" as="button" onClick={() => onSetSelect(set.id)}>
                         <Heading>
                             {set.name}
                         </Heading>
