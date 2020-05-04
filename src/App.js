@@ -2,11 +2,12 @@ import React from 'react';
 import './App.scss';
 import SetOfSongs from "./components/SetOfSongs";
 import SetSelector from "./components/SetSelector"
-import { ThemeProvider, Select, theme, useToast} from '@chakra-ui/core';
+import { Button, ThemeProvider, Select, theme} from '@chakra-ui/core';
 import { CSSReset } from '@chakra-ui/core';
 import GigsAPI from "./api/GigsAPI";
 import SetsAPI from "./api/SetsAPI";
 import SongsAPI from "./api/SongsAPI";
+import StateAPI from "./api/StateAPI";
 
 
 const customTheme = {
@@ -34,7 +35,7 @@ class App extends React.Component{
 
   constructor(props){
     super(props);
-    this.handleSetSelect.bind(this);
+    this.handleGetState.bind(this);
     this.state = {
       isSetSelected: false,
       activeSetId: null,
@@ -45,6 +46,7 @@ class App extends React.Component{
       loading: true,
       error: null
     }
+    
   }
 
   componentDidMount(){
@@ -58,6 +60,30 @@ class App extends React.Component{
           loading:false,
         })
     )
+  }
+
+  componentDidUpdate(){
+    console.log(this.state)
+  }
+
+  handleShare = () => {
+    const {currentGig, activeSetId, isSetSelected, sets, songs} = this.state;
+    StateAPI.updateState(currentGig, activeSetId, isSetSelected, sets, songs)
+  }
+
+  handleGetState = () => {
+    StateAPI.getState().then(
+      (result) => {
+        this.setState({
+          currentGig: result.currentGig, 
+          activeSetId: result.activeSetId,  
+          sets: result.sets,
+          songs: result.songs
+        })
+      this.handleSetSelect(result.activeSetId)
+      }
+    ).finally(console.log(this.state))
+    
   }
 
   handleGigSelection = (gigId) => {
@@ -208,6 +234,7 @@ class App extends React.Component{
           }        
         </Select>
         {this.state.isSetSelected ?
+        <>
           <SetOfSongs
             name={currentSet.name} 
             setId={currentSet.id}
@@ -221,6 +248,8 @@ class App extends React.Component{
             isLast={(currentSetIndex+1 === this.state.sets.length)}
             isTrash={(currentSetIndex+1 === this.state.sets.length)}
             />
+            <Button onClick={this.handleShare} w="100%"> Wyślij do wszystkich </Button>
+            </>
           :
           <SetSelector
             gigId = {this.state.currentGig.id}
@@ -229,6 +258,7 @@ class App extends React.Component{
             onSetSelect={this.handleSetSelect}
           />
          }
+         <Button onClick={this.handleGetState} w="100%"> Pobierz aktualny set </Button>
          </>}
       </ThemeProvider>
     );
