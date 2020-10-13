@@ -17,7 +17,11 @@ const SongsAPI ={
         const response = await axios.get(SONGS_URL);
         const songs = response.data;
 
-        const songsFromSet = songs.filter((song) => currentSet.songIds.includes(song.id))
+        //const songsFromSet = songs.filter((song) => currentSet.songIds.includes(song.id))
+        const songsFromSet = []
+        currentSet.songIds.forEach(element => {
+            songsFromSet.push(songs.find(song => song.id === element))
+        });
         console.log(songsFromSet)
         return songsFromSet;
     }
