@@ -1,6 +1,8 @@
 import {Box, Button, Grid, Heading, Accordion} from "@chakra-ui/core";
 import React from "react";
 import Song from "./Song";
+import { uuid } from 'uuidv4';
+
 
 class SetOfSongs extends React.Component{
     state = {
@@ -39,7 +41,7 @@ class SetOfSongs extends React.Component{
             {this.state.error ? "nie udało się załadować utworów" : null}
             {this.props.songs.map( (song) => (
                     <Song
-                        key = {song.id}
+                        key = {uuid()}
                         id = {song.id}
                         title = {song.title}
                         author = {song.author}
