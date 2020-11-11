@@ -1,5 +1,6 @@
 import React from "react";
-import {Button} from "@chakra-ui/core"
+import {Box, Button, ButtonGroup} from "@chakra-ui/core";
+import {BsHash} from "react-icons/bs";
 function Transpose(props){
 
     let splittedChords = props.chords.toString().split(" ");
@@ -112,10 +113,15 @@ function Transpose(props){
       
     return transposedChords;
 }
-function TransposeWidget({transpose, onMinus, onPlus, onReset}){
+function TransposeWidget({transpose, onMinus, onPlus, onReset, onToggleMode}){
     return(
-        <>
+        <>   
+        <Button margin={3} onClick={onToggleMode}>
+            <Box as={BsHash}/>
+        </Button>
+        <ButtonGroup spacing={1}>
         {transpose > -12 &&
+        
         <Button onClick={onMinus}>
             -
         </Button>}
@@ -124,7 +130,9 @@ function TransposeWidget({transpose, onMinus, onPlus, onReset}){
         <Button onClick={onPlus}>
              +
         </Button>}
+        </ButtonGroup>
         </>
+        
     )}
 
 export {TransposeWidget, Transpose};

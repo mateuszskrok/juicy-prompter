@@ -1,4 +1,7 @@
 import React from "react";
+import { 
+   Button
+} from "@chakra-ui/core";
 
 class TapTempoButton extends React.Component{
 
@@ -38,14 +41,14 @@ class TapTempoButton extends React.Component{
     render(){
         const {timeDifferenceBetweenTapsInSeconds} = this.state;
         return(
-            <button onMouseDown={this.handleTapTempo} 
+            <Button onMouseDown={this.handleTapTempo} 
                                 className="blink"  
                                 style={{
                                     animation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`, 
                                     WebkitAnimation: `blink ${timeDifferenceBetweenTapsInSeconds}s infinite`
                                     }}>
                                     {this.state.tempo ? this.state.tempo : "TAP"}
-                        </button>
+                        </Button>
         )
     }
 }
