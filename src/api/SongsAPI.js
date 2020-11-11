@@ -24,7 +24,17 @@ const SongsAPI ={
         });
         console.log(songsFromSet)
         return songsFromSet;
-    }
+    },
+    addSong: async function (songToAdd){
+        const response = await axios.post(SONGS_URL, songToAdd);
+        const addedSong = response.data;
+        return addedSong;
+        },
+    replaceSong: async function (idToReplace, songToReplace){
+        const response = await axios.put(`${SONGS_URL}/${idToReplace}`, songToReplace);
+        const replacedSong = response.data;
+        return replacedSong;
+        },
 }
 
 export default SongsAPI;

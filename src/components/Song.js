@@ -3,12 +3,13 @@ import {
     Box, Heading, Badge, IconButton, Divider, Text, 
     AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup,
 } from "@chakra-ui/core";
-import {BsFileText, BsHash} from "react-icons/bs";
+import {BsFileText} from "react-icons/bs";
 import {GiMusicalScore}from "react-icons/gi";
 import {MdSpeakerNotes} from "react-icons/md";
 import SongLyrics from "./SongLyrics";
 import TapTempoButton from "./TapTempoButton";
 import {Transpose, TransposeWidget} from "./Transpose";
+import SongsAPI from "../api/SongsAPI";
 
 class Song extends React.Component{
 
@@ -17,7 +18,9 @@ class Song extends React.Component{
         areNotesVisible: false,
         areChordSVisible: false,
         error: null,
+        editMode: false,
         useSharp: true,
+        lyrics: this.props.lyrics,
         transpose:0
     };
 
@@ -70,10 +73,40 @@ class Song extends React.Component{
             }
         })
     }
+
+    handleLyricsEdit = () => {
+        this.setState({
+            editMode:true
+        });
+    }
+    handleLyricsChange = (event) => {
+        this.setState({
+            lyrics: event.target.value
+        });
+    }
+    handleLyricsSave = (state) => {
+        console.log('saving lyrics')
+        const {id, title, author, tempo, root, chords, notes} = this.props;
+
+        this.setState({
+            editMode:false,
+        });
+        const song = {
+            id: id,
+            title: title,
+            author: author,
+            tempo: tempo,
+            root: root,
+            chords: chords,
+            notes: notes,
+            lyrics: this.state.lyrics
+        }
+        SongsAPI.replaceSong(id,song)
+    }
    
     render(){
-        const {id, title, author, tempo, root, lyrics, chords, notes, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
-        const {transpose, useSharp, areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
+        const {id, title, author, tempo, root, chords, notes, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        const {lyrics, transpose, useSharp, areLyricsVisible, areNotesVisible, areChordsVisible, editMode} = this.state;
         
         let bg = "#333";
         if (title.includes("zielone")) {
@@ -122,16 +155,17 @@ class Song extends React.Component{
                         <Button onClick={this.handleToggleChordsVisibility}>
                             <Box as={GiMusicalScore}/>
                         </Button>
-                        <Button onClick={this.handleToggleChordsMode}>
-                            <Box as={BsHash}/>
-                        </Button>
                         <TapTempoButton tempo={tempo}/>
+                        
+                        {areChordsVisible ?
+                        <>                     
                         <TransposeWidget 
                             transpose={transpose} 
                             onMinus={this.handleTransposeDown} 
                             onPlus={this.handleTransposeUp}
-                            onReset={this.handleTransposeReset}/>
-                        
+                            onReset={this.handleTransposeReset}
+                            onToggleMode={this.handleToggleChordsMode}/>
+                        </> : ""}
                     </ButtonGroup>
                     
                     {areNotesVisible ?
@@ -154,8 +188,12 @@ class Song extends React.Component{
                     <SongLyrics 
                         title={title} 
                         author={author} 
-                        defaultLyrics={lyrics} 
+                        lyrics={lyrics} 
                         areVisible={areLyricsVisible}
+                        editMode={editMode}
+                        onEdit={this.handleLyricsEdit}
+                        onSave={this.handleLyricsSave}
+                        onChange={this.handleLyricsChange}
                     />
                     
                  </AccordionPanel>
