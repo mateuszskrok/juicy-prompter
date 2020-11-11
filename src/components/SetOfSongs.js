@@ -48,6 +48,8 @@ class SetOfSongs extends React.Component{
                         root = {song.root}
                         tempo = {song.tempo}
                         lyrics = {song.lyrics}
+                        chords = {song.chords}
+                        notes = {song.notes}
                         isSetLast = {isLast}
                         isSetTrash = {isTrash}
                         onMoveSongToNextSet = {() => onMoveSongToNextSet(song.id)}

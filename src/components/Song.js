@@ -1,50 +1,25 @@
 import React from "react";
 import { 
-    Box, Heading, Badge, IconButton, Divider, Text, useToast,
-    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup
+    Box, Heading, Badge, IconButton, Divider, Text, 
+    AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup,
 } from "@chakra-ui/core";
-import {BsFileText} from "react-icons/bs";
+import {BsFileText, BsHash} from "react-icons/bs";
 import {GiMusicalScore}from "react-icons/gi";
 import {MdSpeakerNotes} from "react-icons/md";
 import SongLyrics from "./SongLyrics";
 import TapTempoButton from "./TapTempoButton";
 import {Transpose, TransposeWidget} from "./Transpose";
-import ChordsAPI from "../api/ChordsAPI";
-import NotesAPI from "../api/NotesAPI";
-
-
 
 class Song extends React.Component{
 
     state={
-        notes: {},
-        chords: {},
         areLyricsVisible: true,
         areNotesVisible: false,
         areChordSVisible: false,
         error: null,
+        useSharp: true,
         transpose:0
     };
-
-    componentDidMount(){
-      this.getChords(this.props.id)
-      this.getNotes(this.props.id)
-    }
-    getChords(songID){
-        ChordsAPI.getChords(songID).then(
-            (chords) => this.setState({chords})
-        ).catch(
-            (error) => this.setState({error})   
-        )
-    }
-
-    getNotes(songID){
-        NotesAPI.getNotes(songID).then(
-            (notes) => this.setState({notes})
-        ).catch(
-            (error) => this.setState({error})   
-        )
-    }
 
     handleTransposeDown = () => {
         this.setState((prevState) => {
@@ -80,6 +55,14 @@ class Song extends React.Component{
         })
     }
 
+    handleToggleChordsMode = (event) => {
+        this.setState((prevState) => {
+            return{
+                useSharp: !prevState.useSharp
+            }
+        })
+    }
+
     handleToggleChordsVisibility = (event) => {
         this.setState((prevState) => {
             return{
@@ -89,8 +72,8 @@ class Song extends React.Component{
     }
    
     render(){
-        const {id, title, author, tempo, root, lyrics, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
-        const {chords, notes, transpose, areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
+        const {id, title, author, tempo, root, lyrics, chords, notes, onMoveSongToNextSet, onRejectSong, isSetTrash, isSetLast} = this.props;
+        const {transpose, useSharp, areLyricsVisible, areNotesVisible, areChordsVisible} = this.state;
         
         let bg = "#333";
         if (title.includes("zielone")) {
@@ -139,6 +122,9 @@ class Song extends React.Component{
                         <Button onClick={this.handleToggleChordsVisibility}>
                             <Box as={GiMusicalScore}/>
                         </Button>
+                        <Button onClick={this.handleToggleChordsMode}>
+                            <Box as={BsHash}/>
+                        </Button>
                         <TapTempoButton tempo={tempo}/>
                         <TransposeWidget 
                             transpose={transpose} 
@@ -156,11 +142,21 @@ class Song extends React.Component{
                     : ""}
                     {areChordsVisible ? 
                     <Box>
-                        <Text as="kbd"><Transpose chords={chords} semitones={this.state.transpose} useSharp={true}></Transpose></Text>
+                        <Text as="kbd">
+                            <Transpose 
+                                chords={chords} 
+                                semitones={transpose} 
+                                useSharp={useSharp}>
+                            </Transpose></Text>
                     </Box>
                     : ""}
                     
-                    <SongLyrics title={title} author={author} defaultLyrics={lyrics} areVisible={areLyricsVisible}/>
+                    <SongLyrics 
+                        title={title} 
+                        author={author} 
+                        defaultLyrics={lyrics} 
+                        areVisible={areLyricsVisible}
+                    />
                     
                  </AccordionPanel>
                 </AccordionItem>
