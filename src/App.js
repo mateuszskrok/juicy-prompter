@@ -248,7 +248,7 @@ class App extends React.Component{
             isLast={(currentSetIndex+1 === this.state.sets.length)}
             isTrash={(currentSetIndex+1 === this.state.sets.length)}
             />
-            <Button onClick={this.handleShare} w="100%"> Wyślij do wszystkich </Button>
+            <Button onClick={this.handleShare} w="100%"> Udostępnij </Button>
             </>
           :
           <SetSelector

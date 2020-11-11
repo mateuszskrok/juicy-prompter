@@ -1,7 +1,5 @@
 import React from "react";
 
-
-
 class TapTempoButton extends React.Component{
 
     state = {

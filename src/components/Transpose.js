@@ -97,7 +97,7 @@ function Transpose(props){
     ]
  
     const transposedChordIndexes = splittedChords.map(
-        chord => (transposeTable.find(a => a.key===chord).value + props.semitones) % 12
+        chord => (transposeTable.find(a => a.key===chord).value + props.semitones + 12) % 12
     )
     var transposedChords = []
      
