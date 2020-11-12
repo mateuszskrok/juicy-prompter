@@ -1,10 +1,15 @@
 import React from "react";
+import ReactHtmlParser from 'react-html-parser';
+import {Transpose, TransposeWidget} from "./Transpose";
 import { 
-    Box, Button, 
+    Box, Button, Textarea
         }
     from "@chakra-ui/core";
+import {GiMusicalScore}from "react-icons/gi";
 // import config from "../config.js";
 // import fetchJsonp from "fetch-jsonp";
+
+
 class SongLyrics extends React.Component{
 
  
@@ -43,26 +48,69 @@ class SongLyrics extends React.Component{
     // componentDidMount() {
     //     this.loadText();
     // }
-    render(){
-        const {lyrics, areVisible, editMode, onEdit, onChange, onSave} = this.props;
+    
 
+
+  
+    render(){
+        const {
+            lyrics, 
+            chords, 
+            areVisible, 
+            editMode, 
+            onEdit, 
+            onChange, 
+            onSave, 
+            semitones, 
+            useSharp, 
+            onToggleChords, 
+            areChordsVisible,
+            onMinus,
+            onPlus,
+            onReset,
+            onToggleMode
+        } = this.props;
+        var insertChords= function(p,c){return p.replace(/%s/,`<span class="chords">${c}</span >`)};
+        const onlyLyrics = lyrics.replace(/%s/g,"")
+        
         return(
             areVisible ?
+            
             <Box>
+                  <Button onClick={onToggleChords}>
+                            <Box as={GiMusicalScore}/>
+                    </Button>
                 {editMode ?
                 <>
-                <textarea
-                    width="100%"
+                <Box width="100%"> 
+                <Textarea className="textEditor"
                     onChange={onChange}
                     defaultValue={lyrics}>
-                 </textarea>
+                 </Textarea>
+                </Box>
+                
                 <Button onClick={onSave}>Zapisz</Button>
                 </>
                 :
                 <>
-                <pre style={{fontFamily: "Roboto"}}>
-                    {lyrics}
-                </pre>
+                {areChordsVisible?
+                    <>                     
+                        <TransposeWidget 
+                            transpose={semitones} 
+                            onMinus={onMinus}
+                            onPlus={onPlus}
+                            onReset={onReset}
+                            onToggleMode={onToggleMode}/>
+                    <p className="chordsLyrics">
+                        {ReactHtmlParser(Transpose(chords, useSharp, semitones).reduce(insertChords, lyrics).replace(/%s/g,""))}
+                    </p>
+                    </> 
+                    :
+                    <p className="lyrics">
+                        {ReactHtmlParser(onlyLyrics)}
+                    </p>
+                }
+                
                 <Button onClick={onEdit}>Edytuj</Button></>
                 }
                 

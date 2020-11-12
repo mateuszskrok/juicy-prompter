@@ -63,7 +63,6 @@ class App extends React.Component{
   }
 
   componentDidUpdate(){
-    console.log(this.state)
   }
 
   handleShare = () => {
@@ -82,7 +81,7 @@ class App extends React.Component{
         })
       this.handleSetSelect(result.activeSetId)
       }
-    ).finally(console.log(this.state))
+    )
     
   }
 

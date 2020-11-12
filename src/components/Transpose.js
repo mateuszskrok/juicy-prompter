@@ -1,9 +1,9 @@
 import React from "react";
 import {Box, Button, ButtonGroup} from "@chakra-ui/core";
-import {BsHash} from "react-icons/bs";
-function Transpose(props){
+import {BsHash, BsTrophy} from "react-icons/bs";
+function Transpose(chords, useSharp,semitones){
 
-    let splittedChords = props.chords.toString().split(" ");
+    let splittedChords = chords;
     const transposeTable = [
         {key: "c", value: 0.5},
         {key: "cis", value: 1.5},
@@ -96,13 +96,12 @@ function Transpose(props){
         {key: "B",value:  10},
         {key: "H", value: 11} 
     ]
- 
     const transposedChordIndexes = splittedChords.map(
-        chord => (transposeTable.find(a => a.key===chord).value + props.semitones + 12) % 12
+        chord => (transposeTable.find(a => a.key===chord).value + semitones + 12) % 12
     )
     var transposedChords = []
      
-    if (props.useSharp) {
+    if (useSharp) {
     transposedChords = transposedChordIndexes.map(
         index => decodeTable.find(a => a.value===index).key + " "
     )}
@@ -110,7 +109,8 @@ function Transpose(props){
     transposedChords = transposedChordIndexes.map(
         index => decodeTableB.find(a => a.value===index).key + " "
     )}
-      
+    console.log("transpose:", transposedChords, semitones)
+
     return transposedChords;
 }
 function TransposeWidget({transpose, onMinus, onPlus, onReset, onToggleMode}){

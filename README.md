@@ -10,6 +10,7 @@ App developed for my band www.juicylucyband.pl to help with setlist management a
 - [x] display set of songs and add easy navigation
 - [x] remove songs from sets, move song to next set
 - [x] display lyrics, chords and notes of songs
+- [x] display chords over lyrics
 - [x] integrate Musixmatch API to get lyrics by title and author
 - [x] synchronize view for multiple users (using state)
 - [x] transpose chords
@@ -22,6 +23,7 @@ App developed for my band www.juicylucyband.pl to help with setlist management a
 - [ ] create, remove set of songs
 - [ ] create, update, remove song from database
 - [ ] automatical synchronization of view for multiple users
+- [ ] advanced chords
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -4,11 +4,9 @@ import {
     AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Button, ButtonGroup,
 } from "@chakra-ui/core";
 import {BsFileText} from "react-icons/bs";
-import {GiMusicalScore}from "react-icons/gi";
 import {MdSpeakerNotes} from "react-icons/md";
 import SongLyrics from "./SongLyrics";
 import TapTempoButton from "./TapTempoButton";
-import {Transpose, TransposeWidget} from "./Transpose";
 import SongsAPI from "../api/SongsAPI";
 
 class Song extends React.Component{
@@ -16,12 +14,12 @@ class Song extends React.Component{
     state={
         areLyricsVisible: true,
         areNotesVisible: false,
-        areChordSVisible: false,
+        areChordsVisible: false,
         error: null,
         editMode: false,
         useSharp: true,
         lyrics: this.props.lyrics,
-        transpose:0
+        transpose: 0
     };
 
     handleTransposeDown = () => {
@@ -152,20 +150,7 @@ class Song extends React.Component{
                         <Button onClick={this.handleToggleNotesVisibility}> 
                             <Box as={MdSpeakerNotes}/>
                         </Button>
-                        <Button onClick={this.handleToggleChordsVisibility}>
-                            <Box as={GiMusicalScore}/>
-                        </Button>
                         <TapTempoButton tempo={tempo}/>
-                        
-                        {areChordsVisible ?
-                        <>                     
-                        <TransposeWidget 
-                            transpose={transpose} 
-                            onMinus={this.handleTransposeDown} 
-                            onPlus={this.handleTransposeUp}
-                            onReset={this.handleTransposeReset}
-                            onToggleMode={this.handleToggleChordsMode}/>
-                        </> : ""}
                     </ButtonGroup>
                     
                     {areNotesVisible ?
@@ -173,27 +158,25 @@ class Song extends React.Component{
                     <Box>
                         <Text as="i">{notes}</Text> 
                     </Box>
-                    : ""}
-                    {areChordsVisible ? 
-                    <Box>
-                        <Text as="kbd">
-                            <Transpose 
-                                chords={chords} 
-                                semitones={transpose} 
-                                useSharp={useSharp}>
-                            </Transpose></Text>
-                    </Box>
-                    : ""}
-                    
+                    : ""}                   
                     <SongLyrics 
                         title={title} 
                         author={author} 
                         lyrics={lyrics} 
                         areVisible={areLyricsVisible}
                         editMode={editMode}
+                        chords={chords}
                         onEdit={this.handleLyricsEdit}
                         onSave={this.handleLyricsSave}
                         onChange={this.handleLyricsChange}
+                        onToggleChords={this.handleToggleChordsVisibility}
+                        semitones={transpose} 
+                        useSharp={useSharp}
+                        areChordsVisible={areChordsVisible}
+                        onMinus={this.handleTransposeDown} 
+                        onPlus={this.handleTransposeUp}
+                        onReset={this.handleTransposeReset}
+                        onToggleMode={this.handleToggleChordsMode}
                     />
                     
                  </AccordionPanel>
