@@ -1,3 +1,28 @@
+# Juicy prompter
+
+App developed for my band www.juicylucyband.pl to help with setlist management and searching for lyrics.
+
+## Scope of project
+
+### Done
+
+- [x] display setlist for chosen concert
+- [x] display set of songs and add easy navigation
+- [x] remove songs from sets, move song to next set
+- [x] display lyrics, chords and notes of songs
+- [x] integrate Musixmatch API to get lyrics by title and author
+- [x] synchronize view for multiple users (using state)
+- [x] transpose chords
+- [x] tap tempo button
+
+### To do:
+
+- [ ] user authentication
+- [ ] create, update, remove setlist
+- [ ] create, remove set of songs
+- [ ] create, update, remove song from database
+- [ ] automatical synchronization of view for multiple users
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
