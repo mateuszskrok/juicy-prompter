@@ -1,6 +1,6 @@
 import React from "react";
 import {Box, Button, ButtonGroup} from "@chakra-ui/core";
-import {BsHash, BsTrophy} from "react-icons/bs";
+import {BsHash} from "react-icons/bs";
 function Transpose(chords, useSharp,semitones){
 
     let splittedChords = chords;

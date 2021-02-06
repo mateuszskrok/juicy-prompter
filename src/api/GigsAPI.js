@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "./config.js"
+import BASE_URL from "./baseURL.js"
 const GIGS_URL = (`${BASE_URL}/gigs`);
 console.log(GIGS_URL);
 

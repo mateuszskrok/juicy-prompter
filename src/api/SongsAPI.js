@@ -1,5 +1,5 @@
 import axios from "axios";
-import BASE_URL from "./config"
+import BASE_URL from "./baseURL"
 const SETS_URL = (`${BASE_URL}/sets`);
 const SONGS_URL = (`${BASE_URL}/songs`);
 
