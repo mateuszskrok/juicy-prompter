@@ -103,11 +103,11 @@ function Transpose(chords, useSharp,semitones){
      
     if (useSharp) {
     transposedChords = transposedChordIndexes.map(
-        index => decodeTable.find(a => a.value===index).key + " "
+        index => decodeTable.find(a => a.value===index).key
     )}
     else{
     transposedChords = transposedChordIndexes.map(
-        index => decodeTableB.find(a => a.value===index).key + " "
+        index => decodeTableB.find(a => a.value===index).key
     )}
     console.log("transpose:", transposedChords, semitones)
 
