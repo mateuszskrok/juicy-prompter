@@ -34,7 +34,6 @@ const customTheme = {
 class App extends React.Component{
 
   constructor(props){
-    super(props);
     this.handleGetState.bind(this);
     this.state = {
       isSetSelected: false,
